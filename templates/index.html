@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>TA-13 — Prediksi Penyakit Jantung</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="brand">
+      <div class="logo">AI</div>
+      <div>
+        <div class="brand-title">TA-13 • Support Vector Machine</div>
+        <div class="brand-sub">
+          Sistem Prediksi Penyakit Jantung Berbasis Machine Learning
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <span class="badge">Flask</span>
+      <span class="badge">SVM</span>
+      <span class="badge">Classification</span>
+    </div>
+  </div>
+</header>
+
+<!-- ================= MAIN ================= -->
+<main class="container main">
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+
+  <!-- LEFT -->
+  <div class="hero-left">
+    <h1>
+      Sistem Prediksi <span class="accent">Penyakit Jantung</span>
+    </h1>
+
+    <p class="muted">
+      Aplikasi ini digunakan untuk memprediksi indikasi penyakit jantung
+      berdasarkan data medis pasien menggunakan algoritma
+      <b>Support Vector Machine (SVM)</b>.
+    </p>
+
+    <div class="tips">
+      <div class="tip">
+        <div class="tip-icon">✓</div>
+        <div>
+          <div class="tip-title">Model Klasifikasi</div>
+          <div class="tip-desc">
+            Memprediksi pasien berisiko atau tidak berisiko.
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-icon">⚡</div>
+        <div>
+          <div class="tip-title">Model Siap Pakai</div>
+          <div class="tip-desc">
+            Model telah dilatih dan disimpan dalam format .pkl.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="hero-right">
+
+    <!-- RESULT CARD -->
+    <div class="result-card">
+      <div class="result-head">
+        <div class="result-title">Hasil Prediksi</div>
+        <div class="pill">SVM</div>
+      </div>
+
+      {% if prediction %}
+        <div class="kpi">
+          <div class="kpi-label">Prediksi</div>
+          <div class="kpi-value">{{ prediction }}</div>
+        </div>
+
+        <div class="kpi">
+        <div class="kpi-label">Probabilitas Prediksi</div>
+        <div class="kpi-value mono">{{ probability }}%</div>
+
+        <div class="meter">
+            <div class="meter-bar" style="width: {{ probability }}%;"></div>
+        </div>
+
+        <div class="meter-note">
+            0% <span class="spacer"></span> 50% <span class="spacer"></span> 100%
+        </div>
+        </div>
+
+
+        <div class="decision-box">
+        {% if label == 0 %}
+            <button class="btn rejected" disabled>BERISIKO</button>
+        {% elif label == 1 %}
+            <button class="btn accepted" disabled>AMAN</button>
+        {% endif %}
+        </div>
+
+      {% else %}
+        <div class="analysis-box empty-state">
+          <div class="empty-title">Belum ada hasil prediksi</div>
+          <div class="empty-desc">
+            Silakan isi data pasien pada formulir di bawah untuk melihat hasil prediksi.
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FORM ================= -->
+<section class="form-section">
+
+  <form method="POST" class="card">
+
+    <div class="grid two">
+
+      <div class="field">
+        <label>Age</label>
+        <input type="number" id="age" name="age" required>
+        </div>
+
+        <div class="field">
+        <label>Sex (0=Perempuan, 1=Laki-laki)</label>
+        <input type="number" id="sex" name="sex" required>
+        </div>
+
+        <div class="field">
+        <label>Chest Pain Type</label>
+        <input type="number" id="cp" name="cp" required>
+        </div>
+
+        <div class="field">
+        <label>Resting Blood Pressure</label>
+        <input type="number" id="trestbps" name="trestbps" required>
+        </div>
+
+        <div class="field">
+        <label>Cholesterol</label>
+        <input type="number" id="chol" name="chol" required>
+        </div>
+
+        <div class="field">
+        <label>Fasting Blood Sugar</label>
+        <input type="number" id="fbs" name="fbs" required>
+        </div>
+
+        <div class="field">
+        <label>Rest ECG</label>
+        <input type="number" id="restecg" name="restecg" required>
+        </div>
+
+        <div class="field">
+        <label>Max Heart Rate</label>
+        <input type="number" id="thalach" name="thalach" required>
+        </div>
+
+        <div class="field">
+        <label>Exercise Induced Angina</label>
+        <input type="number" id="exang" name="exang" required>
+        </div>
+
+        <div class="field">
+        <label>Oldpeak</label>
+        <input type="number" step="any" id="oldpeak" name="oldpeak" required>
+        </div>
+
+        <div class="field">
+        <label>Slope</label>
+        <input type="number" id="slope" name="slope" required>
+        </div>
+
+        <div class="field">
+        <label>CA</label>
+        <input type="number" id="ca" name="ca" required>
+        </div>
+
+        <div class="field">
+        <label>Thal</label>
+        <input type="number" id="thal" name="thal" required>
+        </div>
+
+
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">
+        Prediksi Penyakit Jantung
+      </button>
+
+      <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-ghost" onclick="fillRisk()">Contoh Berisiko</button>
+        <button type="button" class="btn btn-ghost" onclick="fillSafe()">Contoh Aman</button>
+      </div>
+    </div>
+
+    <div class="reset-box">
+      <a href="/" class="btn-ghost">Reset Input</a>
+    </div>
+
+  </form>
+</section>
+
+<footer class="footer">
+  © TA-13 • Support Vector Machine • Heart Disease Prediction
+</footer>
+
+</main>
+
+<script>
+function fillRisk(){
+  age.value=60; sex.value=1; cp.value=0; trestbps.value=150;
+  chol.value=300; fbs.value=1; restecg.value=1; thalach.value=120;
+  exang.value=1; oldpeak.value=3.5; slope.value=0; ca.value=2; thal.value=3;
+}
+function fillSafe(){
+  age.value=35; sex.value=0; cp.value=2; trestbps.value=120;
+  chol.value=180; fbs.value=0; restecg.value=0; thalach.value=170;
+  exang.value=0; oldpeak.value=0.5; slope.value=2; ca.value=0; thal.value=2;
+}
+</script>
+
+</body>
+</html>
